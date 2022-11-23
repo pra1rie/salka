@@ -67,7 +67,7 @@ struct Obj
 	}
 }
 
-private string[] tokenize(string file)
+string[] tokenize(string file)
 {
 	string ignored = "\t\r\n;";
 	string separators = ",:[]\"";
@@ -121,7 +121,7 @@ private string[] tokenize(string file)
 	return toks;
 }
 
-private final class Parser
+final class Parser
 {
 public:
 	Obj[string] vars;
