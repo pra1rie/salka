@@ -1,9 +1,0 @@
-commands: [
-	["browser", "qutebrowser", "B"],
-	["terminal", "kitty", "T"],
-]
-
-font-path: "JuliaMono.ttf"
-font-size: 24
-window-width: 640
-# window-height: 240 #

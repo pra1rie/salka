@@ -23,7 +23,7 @@ bool isNumber(string str)
 
 void fail(string err)
 {
-	stderr.writeln("[ERROR] " ~ err);
+	stderr.writeln("FAIL: " ~ err);
 	exit(1);
 }
 
@@ -168,8 +168,9 @@ private:
 	Obj parseNumber()
 	{
 		auto num = toks[pos++];
-		return Obj(num.canFind('.')?
-			to!double(num) : to!long(num));
+		if (num.canFind('.'))
+			return Obj(to!double(num));
+		return Obj(to!long(num));
 	}
 
 	Obj parseString()
