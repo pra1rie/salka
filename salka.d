@@ -70,7 +70,7 @@ struct Obj
 string[] tokenize(string file)
 {
 	string ignored = "\t\r\n;";
-	string separators = ",:[]\"";
+	string separators = ",:![]\"";
 	string[] toks;
 	string text;
 
@@ -157,6 +157,7 @@ private:
 				return parseList();
 			case ']':
 			case ':':
+			case '!':
 			case ',':
 				fail("Unexpected token: " ~ toks[pos]);
 				assert(false, "Unreachable");
@@ -208,6 +209,19 @@ private:
 			auto expr = parseExpr();
 			vars[name] = expr;
 			return expr;
+		}
+		if (pos < toks.length && toks[pos] == "!") {
+			++pos;
+			auto expr = parseExpr();
+			
+			if (!(name in vars))
+				fail("Variable does not exist: " ~ name);
+			if (vars[name].type != ObjType.LIST)
+				fail("Expected '" ~ name ~ "' to be a list, but found: " ~ vars[name].getObj);
+			if (expr.type != ObjType.INTEGER)
+				fail("Expected integer, but found: " ~ expr.getObj);
+
+			return vars[name].list[to!ulong(expr.base)];
 		}
 
 		if (!(name in vars))
