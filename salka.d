@@ -214,25 +214,36 @@ private:
 		if (!(name in vars))
 			fail("Variable does not exist: " ~ name);
 
+		Obj var = vars[name];
+
 		if (pos < toks.length && toks[pos] == "!") {
-			return parseListIndex(name);
+			return parseListIndex(var);
 		}
 
-		return vars[name];
+		return var;
 	}
 
-	Obj parseListIndex(string name)
+	Obj parseListIndex(Obj var)
 	{
 		++pos;
 		auto expr = parseExpr();
 		
-		if (vars[name].type != ObjType.LIST)
-			fail("Expected list, but found: " ~ vars[name].getObj);
+		if (var.type != ObjType.LIST)
+			fail("Expected list, but found: " ~ var.getObj);
 
 		if (expr.type != ObjType.INTEGER)
 			fail("Expected integer, but found: " ~ expr.getObj);
 
-		return vars[name].list[to!ulong(expr.base)];
+		auto num = to!ulong(expr.base);
+		if (num >= var.list.length)
+			fail("List index out of range: " ~ expr.getObj);
+
+		Obj obj = var.list[num];
+		if (pos < toks.length && toks[pos] == "!") {
+			return parseListIndex(obj);
+		}
+
+		return obj;
 	}
 }
 
