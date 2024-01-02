@@ -8,6 +8,7 @@ import core.stdc.stdlib : exit;
 
 // Better than JSON lmao
 // TODO: perhaps add record/struct types
+//			more like.... just rewrite everything
 
 bool isNumber(string str)
 {
